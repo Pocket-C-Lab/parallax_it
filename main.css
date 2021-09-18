@@ -15,6 +15,24 @@ body {
 	height: 100%;
 	overflow: hidden;
 }
+p {
+	user-select: none;
+}
+img {
+	user-select: none;
+}
+button {
+	width: 100%;
+	padding: 10px;
+	margin-top: 5px;
+	margin-right: 5px;
+	border-radius: 100px;
+	border: none;
+	font-size: 15px;
+	user-select: none;
+	color: #0b0800;
+	background-color: #f9fdb3;
+}
 @font-face {
 	font-family: face2;
 	src: url(assets/fonticons.ttf);
@@ -85,7 +103,7 @@ body {
 	margin-right: 20px;
 	padding: 0px;
 }
-.setting-li input[type=text], select {
+.setting-li input[type=text], input[type=number], select {
 	width: 100px;
 	display: inline-block;
 	border: 1px solid #ccc;

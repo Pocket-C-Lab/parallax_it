@@ -12,6 +12,7 @@
 	<title>Parallax It</title>
 	<link rel="stylesheet" type="text/css" href="main.css">
 	<link rel="stylesheet" type="text/css" href="sidebar.css">
+	<link rel="stylesheet" type="text/css" href="widgets.css">
 	<!-- <link rel="stylesheet" type="text/css" href="context.js/context-menu.min.css"> -->
 	<script type="text/javascript" src="angular-1.8.2/angular.min.js"></script>
 	<script type="text/javascript" src="angular-1.8.2/angular-route.min.js"></script>
@@ -45,38 +46,49 @@
 		<!-- End of Left sidebar 1 -->
 
 		<!-- The Left sidebar 2 -->
-		<div class="sidebar" ng-hide="leftMenuVisibility" ng-init="option = [{n:'Layers', h:'#new_file',    i:'C', v:''},
+		<div class="sidebar" ng-hide="leftMenuVisibility" ng-init="option = [{n:'Import', h:'#import',    i:'H', v:''},
+																			{n:'Layers', h:'#new_file',    i:'C', v:''},
                                                                         	{n:'Speed',   h:'#open_file',   i:'D', v:''},
                                                                         	{n:'Export',  h:'#import_file', i:'G', v:''}]">
-      <!-- Layers -->
-      <a class="section" style="padding-left: 10px;" ng-click="option[0].v==''?option[0].v='hidden':option[0].v=''">
-        <p>{{option[0].n}}</p>
-      </a>
-      <div id="layers" ng-hide="option[0].v">
-        <div style="display: flex; justify-content: space-between;">
-          <img src="" alt="img"/>
-          <p>Layer 1</p>
-          <input type="checkbox" checked/>
-        </div>
-      </div>
-      <!-- Speed -->
-      <a class="section" style="padding-left: 10px;" ng-click="option[1].v==''?option[1].v='hidden':option[1].v=''">
-        <p>{{option[1].n}}</p>
-      </a>
-      <div style="margin: 0; text-align: center;" ng-hide="option[1].v">
-        <div style="display: inline-flex;">
-          <img src="" alt="img"/>
-          <p>Layer 1</p>
-          <input type="checkbox" checked/>
-        </div>
-      </div>
-      <!-- Export -->
-      <a class="section" style="padding-left: 10px;" ng-click="option[2].v==''?option[2].v='hidden':option[2].v=''">
-        <p>{{option[2].n}}</p>
-      </a>
-      <div style="margin: 0; display: inline-flex; width: 100%;" ng-hide="option[2].v">
-        <button style="margin-left: 5px;">Save</button><button>Cancel</button>
-      </div>
+			
+			<!-- Import -->
+			<a class="section" style="padding-left: 10px;" ng-click="option[0].v==''?option[0].v='hidden':option[0].v=''">
+				<p>{{option[0].n}}</p>
+			</a>
+			<div style="margin: 0; display: inline-flex; width: 100%;" ng-hide="option[0].v">
+				<button id="import" style="margin-left: 5px;" ng-click="o_oF(option[0].i)">+ click to add an image</button>
+			</div>
+			<!-- Layers -->
+			<a class="section" style="padding-left: 10px;" ng-click="option[1].v==''?option[1].v='hidden':option[1].v=''">
+				<p>{{option[1].n}}</p>
+			</a>
+			<div id="layers" ng-hide="option[1].v" style="max-height: 300px; overflow-y: auto;">
+				<div class="layer" ng-repeat="image in images">
+					<div style="display: flex; justify-content: space-between; align-items: center;">
+						<img src="{{image.img.elt.currentSrc}}" width="50px" height="50px" alt="img" />
+						<input type="text" ng-model="image.name" style="width: 90px;"/>
+						<input type="checkbox" style="justify-self: flex-end;" checked/>
+					</div>
+					<input type="range" min="0" max="10" value="50" style="width: 90%; margin: 5%;" id="myRange" />
+				</div>
+			</div>
+			<!-- Speed -->
+			<a class="section" style="padding-left: 10px;" ng-click="option[2].v==''?option[2].v='hidden':option[2].v=''">
+				<p>{{option[2].n}}</p>
+			</a>
+			<div style="margin: 0; text-align: center;" ng-hide="option[2].v">
+				<div style="display: flex; justify-content: space-between;">
+					<input type="range" min="0" max="10" value="50" class="slider" id="myRange" />
+				</div>
+			</div>
+			<!-- Export -->
+			<a class="section" style="padding-left: 10px;" ng-click="option[3].v==''?option[3].v='hidden':option[3].v=''">
+				<p>{{option[3].n}}</p>
+			</a>
+			<div style="margin: 0; display: inline-flex; width: 100%;" ng-hide="option[3].v">
+				<button ng-click="printImages()" style="margin-left: 5px;">Save</button>
+				<button>Cancel</button>
+			</div>
 
 		</div>
 		<!-- End of Left sidebar 2 -->
@@ -108,8 +120,8 @@
 		  	<div class="setting" ng-hide="settingsVisibility">
 		  		<ul ng-repeat="setting in settings" style="margin: 0px; padding: 0px;">
 					<li style="display: flex; justify-content: space-between; width: 100%; height: 40px;" class="setting-li" ng-click="">
-						<p style="display: inline;">{{setting.name}}<p>
-						<input style="display: inline;" type="{{setting.type}}" name="{{setting.name}}" value="{{setting.value}}" min="5" max="25" ng-model="setting.value" ng-chage="inputChanged" />
+						<p style="display: inline; color: #e1e2e4;">{{setting.name}}<p>
+						<input style="display: inline;" type="{{setting.type}}" name="{{setting.name}}" min="5" max="25" ng-model="setting.value" />
 					</li>
 				</ul>
 		  	</div>
