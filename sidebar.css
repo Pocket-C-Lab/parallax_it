@@ -76,6 +76,7 @@
     display: flex;
     margin: 0;
     padding: 12px 16px;
+    color: grey;
   }
   .pointer:hover {
     background-color: #f2ffc4;
@@ -110,7 +111,10 @@
   .layer:last-child {
     border: none;
   }
-  
+  .draggable {
+    cursor: move;
+    user-select: none;
+  }
   /* On screens that are less than 700px wide, make the sidebar into a topbar */
   @media screen and (max-width: 700px) {
     .sidebar {

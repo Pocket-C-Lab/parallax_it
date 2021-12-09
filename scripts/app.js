@@ -1,14 +1,10 @@
-/*jshint esversion: 6 */
+var app = angular.module('app-main', ['ng-context-menu']);
 
-var app = angular.module('app-main', ['ngRoute', 'ng-context-menu']);
-
-app.controller('side-nav', function displayMessage($scope, stringService) {
+app.controller('side-nav', function displayMessage($scope) {
 	$scope.message = "Hello World!";
-	$scope.transformString = function (input) {
-		$scope.output = stringService.processString(input);
-	};
 
 	$scope.images = [];
+	$scope.animationPlay = false;
 
 	var brush = {
 		name: "brush",
@@ -62,7 +58,6 @@ app.controller('side-nav', function displayMessage($scope, stringService) {
 		console.log($scope.selected_tool + " " + $scope.tool_options[$scope.selected_tool]);
 	};
 
-	// tools logic starts here...
 	var settings = 
 		[
 		 {name:'size', value:5, type:'number'},
@@ -119,12 +114,16 @@ app.controller('side-nav', function displayMessage($scope, stringService) {
 
 				    var reader = new FileReader();
 			        reader.onloadend = function() {
-						console.log(reader.result);
-						
-						img = $scope.s.createImg(reader.result, '');
-						img.hide();
-						$scope.images.push({"img": img, "name": file.name});
-						$scope.$apply();
+						img = $scope.p.createImg(reader.result, '', '', function() {
+							console.log(img.elt.width, img.elt.height);
+							img.hide();
+							console.log(file);
+							console.log(img.elt, img.elt);
+							$scope.images.push(new Layer(file.name, file.type, img, img, 1.0));
+							if (img.width > width) {width = img.width; $scope.p.resizeCanvas(width, height, true);}
+							if (img.height > height) {height = img.height; $scope.p.resizeCanvas(width, height, true);}
+							$scope.$apply();
+						});
 			        };
 			        img = reader.readAsDataURL(file);
 			    };
@@ -133,6 +132,9 @@ app.controller('side-nav', function displayMessage($scope, stringService) {
 				$scope.message = "Export";
 			break;
 		}
+	};
+	$scope.Log = function(message) {
+		console.log(message);
 	};
 
 	$scope.toolsVisibility = "";
@@ -167,36 +169,44 @@ app.controller('side-nav', function displayMessage($scope, stringService) {
 		menu.hide();
 		document.removeEventListener('click', hideContextMenu);
 	};
-	$scope.inputChanged = () => {
-		console.log("Changed!");
-	};
 
 
 
 	var canvas = document.getElementById("canvas");
-	var redraw = true, width = window.innerWidth - 460, height = window.innerHeight - 75;
+	var redraw = true, width = 0, height = 0;
+	// var redraw = true, width = window.innerWidth - 460, height = window.innerHeight - 75;
 	var canvasX1 = canvas.offsetLeft, canvasY1 = canvas.offsetTop, canvasX2 = canvasX1+width, canvasY2 = canvasY1+height;
 	var colors = ['white', 'black'], colorSelected = 1;
 	let img;
+	let gameSpeed = 10;
 
-	let x = 0;
-	let x2 = 360;
+	var cnv, gif, recording = false;
 
 	class Layer {
-		constructor(image1, image2, speedModifier) {
+		constructor(name, type, image1, image2, speedModifier) {
+			this.name = name;
+			this.type = type;
+			this.visible = true;
 			this.x = 0;
 			this.y = 0;
-			this.width = 360;
-			this.height = 450;
+			this.width = image1.width;
+			this.height = image1.height;
 			this.x2 = this.width;
-			this.image1 = image1;
-			this.image2 = image2;
+			console.log(image1, image2);
+			if (this.type == "image/gif") {
+				this.img = $scope.p.loadGif(image1.elt.src);
+				this.imginv = $scope.p.loadGif(image2.elt.src);
+			} else {
+				this.img = image1;
+				this.imginv = image2;
+			}
 			this.speedModifier = speedModifier;
 			this.speed = gameSpeed * this.speedModifier;
 		}
 		
 		update() {
-			this.speed = gameSpeed * this.speedModifier;
+			let temp = (this.speedModifier * 0.1);
+			this.speed = gameSpeed * temp;
 			if (this.x <= -this.width) {
 				this.x = this.width;
 				// this.x = this.width + this.x - this.speed;
@@ -208,25 +218,54 @@ app.controller('side-nav', function displayMessage($scope, stringService) {
 			this.x2 = Math.floor(this.x2 - this.speed);
 		}
 		draw() {
-			ctx.drawImage(this.image1, this.x, this.y, this.width, this.height);
-			ctx.drawImage(this.image2, this.x2, this.y, this.width, this.height);
+			$scope.p.image(this.img, this.x, this.y, this.width, this.height);
+			$scope.p.image(this.imginv, this.x2, this.y, this.width, this.height);
 		}
 	}
 
 	let sketch = function(p) {
-		var x=0, y=0;
 		p.setup = () => {
 			// p5.disableFriendlyErrors = true;
-			p.createCanvas(width, height);
+			cnv = p.createCanvas(width, height);
 			p.background("#FFFFFF");	//#f5f5f6
 			p.strokeWeight(0.2);
-			
+		
+			setupGIF();
 		};
+		function setupGIF() {
+			gif = new GIF({
+				workers: 5,
+				quality: 1
+			});
+			gif.on('finished', function(blob) {
+				window.open(URL.createObjectURL(blob));
+			});
+		}
+		function saveVid() {
+			recording = !recording;
+			if (!recording) {
+				gif.render();
+			}
+		}
+		var x=0, y=0;
 
 		p.draw = () => {
+			// p.background(51);
+			// p.fill(255);
+			// p.ellipse(x, y, 20, 20);
+			p.clear();
 			if ($scope.images) {
 				$scope.images.forEach(element => {
-					p.image(element.img, 0, 0, element.img.width, element.img.height);					
+					if ($scope.animationPlay) element.update();
+					if (element.visible) element.draw();					
+					// if (element.visible) p.image(element.img, 0, 0, element.img.width, element.img.height);					
+				});
+			}
+
+			if (recording) {
+				gif.addFrame(cnv.elt, {
+					delay: 20, // 20 is the minimum
+					copy: true
 				});
 			}
 		};
@@ -243,20 +282,20 @@ app.controller('side-nav', function displayMessage($scope, stringService) {
 		p.mousePressed = () => {};
 		p.mouseReleased = () => {};
 		p.doubleClicked = () => {};
-		p.keyTyped = () => {
-			switch(p.key) {
-				case 'z':
-					colorSelected = 0;
-					break;
-				case 'x':
-					colorSelected = 1;
-					break;
-			}
-			return false;
-		};
+		// p.keyTyped = () => {
+		// 	switch(p.key) {
+		// 		case 'z':
+		// 			colorSelected = 0;
+		// 			break;
+		// 		case 'x':
+		// 			colorSelected = 1;
+		// 			break;
+		// 	}
+		// 	return false;
+		// };
 		p.requestPointerLock = () => {};
 		p.exitPointerLock = () => {};
 	};
 
-	$scope.s = new p5(sketch, 'canvas');
+	$scope.p = new p5(sketch, 'canvas');
 });
