@@ -14,13 +14,8 @@
 	<link rel="stylesheet" type="text/css" href="sidebar.css">
 	<link rel="stylesheet" type="text/css" href="widgets.css">
 	<!-- <link rel="stylesheet" type="text/css" href="context.js/context-menu.min.css"> -->
-	<!-- If you are using any of the p5 funtions that affect the whole of page or rather anything
-		 other than the canvas; DON'T, just use any angularjs features or make something of your own.
-		 If you end up ignoring my advice and still use p.keyTyped or something then I'm warning you,
-		 the path ahead is a very painful one, so if you are a sucker for pain like a psycho friend
-		 of mine then sure go ahead, but not in this project! 
-	-->
 	<script type="text/javascript" src="libs/angular-1.8.2/angular.js"></script>
+	<script type="text/javascript" src="libs/angular-1.8.2/angular-route.js"></script>
 	<script type="text/javascript" src="libs/p5/p5.min.js"></script>
 	<script type="text/javascript" src="libs/p5/p5.gif.js/p5.gif.min.js"></script>
 	<script type="text/javascript" src="libs/simplebar/simplebar.js"></script>
@@ -72,7 +67,7 @@
 			<a class="section" style="padding-left: 10px;color: grey;" ng-click="option[1].v==''?option[1].v='hidden':option[1].v='';">
 				<p>{{option[1].n}}</p>
 			</a>
-			<div id="layers" ng-hide="option[1].v" style="max-height: 300px; overflow-y: auto;">
+			<div id="layers" ng-hide="option[1].v" style="max-height: 300px; overflow-y: auto; overflow-x: hidden;">
 				<div class="layer draggable" ng-repeat="image in images">
 					<div style="display: flex; justify-content: space-between; align-items: center;">
 						<img src="{{image.img.elt.currentSrc}}" width="50px" height="50px" alt="img" />
@@ -110,11 +105,7 @@
 				<p>{{option[4].n}}</p>
 			</a>
 			<div style="margin: 0; display: inline-flex; width: 100%;" ng-hide="option[4].v">
-				<button ng-click="printImages()" style="margin-left: 5px;">Export Gif</button>
-				<button>Export MP4</button>
-			</div>
-			<div style="margin: 0; display: inline-flex; width: 100%;" >
-				<button ng-click="saveVid();" style="margin-left: 5px;">Start Recording</button>
+				<button ng-click="hideModal = false; console.log(hideModal);" style="margin-left: 5px;">Export</button>
 			</div>
 
 		</div>
@@ -122,7 +113,7 @@
 
 		<div class="content">
 			<div id="canvas"/>
-			<script type="text/javascript" src="scripts/PixelRec.js"></script>
+			<!-- <script type="text/javascript" src="scripts/PixelRec.js"></script> -->
 			<script type="text/javascript" src="scripts/canvas.js"></script>
 		</div>
 
@@ -165,6 +156,18 @@
 		</ul>
 	</div>
 	<!-- End of context menu -->
+
+	<!-- The Modal element which loads all the modals of the app-->
+	<div id="myModal" class="modal" ng-init="hideModal = true;" ng-hide="hideModal">
+		<!-- Modal content -->
+		<div class="modal-content">
+			<span class="close" ng-click="hideModal = true;">&times;</span>
+			<div ng-view />
+		</div>
+  
+  	</div>
+	<!-- End of The Modal -->
+	
 	<script type="text/javascript" src="scripts/draggable.js" ></script>
 </body>
 </html>

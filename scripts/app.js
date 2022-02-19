@@ -1,9 +1,10 @@
-var app = angular.module('app-main', ['ng-context-menu']);
+var app = angular.module('app-main', ['ngRoute', 'ng-context-menu']);
 
 app.controller('side-nav', function displayMessage($scope) {
 	$scope.message = "Hello World!";
 
 	$scope.images = [];
+	$scope.totalImages = 0;
 	$scope.animationPlay = false;
 
 	var brush = {
@@ -118,11 +119,11 @@ app.controller('side-nav', function displayMessage($scope) {
 							console.log(img.elt.width, img.elt.height);
 							img.hide();
 							console.log(file);
-							console.log(img.elt, img.elt);
-							$scope.images.push(new Layer(file.name, file.type, img, img, 1.0));
+							$scope.images.push(new Layer($scope.totalImages++, file.name, file.type, img, img, $scope.totalImages));
 							if (img.width > width) {width = img.width; $scope.p.resizeCanvas(width, height, true);}
 							if (img.height > height) {height = img.height; $scope.p.resizeCanvas(width, height, true);}
 							$scope.$apply();
+							$scope.totalImages++;
 						});
 			        };
 			        img = reader.readAsDataURL(file);
@@ -169,6 +170,20 @@ app.controller('side-nav', function displayMessage($scope) {
 		menu.hide();
 		document.removeEventListener('click', hideContextMenu);
 	};
+	$scope.saveVid = () => {
+		console.log("saveVid!");
+		// if (!recording) {
+		// 	let minSpeedElement = new Layer("", "", null, null, 0);
+		// 	$scope.images.forEach(element => {
+		// 		if (element.speedModifier < minSpeedElement.speedModifier)
+		// 			minSpeedElement = element;
+		// 	});
+		// }
+		recording = !recording;
+		if (!recording) {
+			gif.render();
+		}
+	};
 
 
 
@@ -183,7 +198,8 @@ app.controller('side-nav', function displayMessage($scope) {
 	var cnv, gif, recording = false;
 
 	class Layer {
-		constructor(name, type, image1, image2, speedModifier) {
+		constructor(id, name, type, image1, image2, speedModifier) {
+			this.id = id;
 			this.name = name;
 			this.type = type;
 			this.visible = true;
@@ -192,7 +208,6 @@ app.controller('side-nav', function displayMessage($scope) {
 			this.width = image1.width;
 			this.height = image1.height;
 			this.x2 = this.width;
-			console.log(image1, image2);
 			if (this.type == "image/gif") {
 				this.img = $scope.p.loadGif(image1.elt.src);
 				this.imginv = $scope.p.loadGif(image2.elt.src);
@@ -241,18 +256,9 @@ app.controller('side-nav', function displayMessage($scope) {
 				window.open(URL.createObjectURL(blob));
 			});
 		}
-		function saveVid() {
-			recording = !recording;
-			if (!recording) {
-				gif.render();
-			}
-		}
 		var x=0, y=0;
 
 		p.draw = () => {
-			// p.background(51);
-			// p.fill(255);
-			// p.ellipse(x, y, 20, 20);
 			p.clear();
 			if ($scope.images) {
 				$scope.images.forEach(element => {
@@ -282,20 +288,45 @@ app.controller('side-nav', function displayMessage($scope) {
 		p.mousePressed = () => {};
 		p.mouseReleased = () => {};
 		p.doubleClicked = () => {};
-		// p.keyTyped = () => {
-		// 	switch(p.key) {
-		// 		case 'z':
-		// 			colorSelected = 0;
-		// 			break;
-		// 		case 'x':
-		// 			colorSelected = 1;
-		// 			break;
-		// 	}
-		// 	return false;
-		// };
+		p.keyTyped = () => {
+			switch(p.key) {
+				case 'z':
+					colorSelected = 0;
+					break;
+				case 'x':
+					colorSelected = 1;
+					break;
+			}
+			return true;
+		};
 		p.requestPointerLock = () => {};
 		p.exitPointerLock = () => {};
 	};
 
 	$scope.p = new p5(sketch, 'canvas');
+});
+
+app.config(function($routeProvider) {
+	$routeProvider
+	.when("/", {
+		templateUrl : "pages/export.htm"
+	})
+	.when("/animatedShapes", {
+		templateUrl : "pages/animated_shapes.htm"
+	})
+	.when("/openDating", {
+		templateUrl : "pages/open_dating.htm"
+	})
+	.when("/pixels", {
+		templateUrl : "pages/pixels.htm"
+	})
+	.when("/work", {
+		templateUrl : "pages/work_profile.htm"
+	})
+	.when("/test", {
+		templateUrl : "pages/test2.htm"
+	})
+	.when("/credits", {
+		templateUrl : "pages/credits.htm"
+	});
 });

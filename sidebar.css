@@ -7,14 +7,16 @@
     position: fixed;
     top: 50px;
     height: calc(100% - 50px);
-    overflow: auto;
+    overflow-y: scroll;
+    overflow-x: hidden;
     scroll-behavior: smooth;
+    scrollbar-width: none;
   }
   
   /* Sidebar links */
   .sidebar a {
     display: flex;
-    color: #e1e2e4;
+    color: grey;
     /*padding: 16px;*/
     text-decoration: none;
     align-items: center;
@@ -22,16 +24,16 @@
   
   /* Active/current link */
   .sidebar a.active {
-    color: #e1e2e4;
+    color: grey;
   }
   .sidebar a.active:hover {
-    background-color: #bb86fc;
+    background-color: #232429;
   }
   
   /* Links on mouse-over */
   .sidebar a:hover:not(.active) {
-    background-color: #8196FF;
-    color: #e1e2e4;
+    background-color: #232429;
+    color: grey;
   }
   
   .sidebar li {
