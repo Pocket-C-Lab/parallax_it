@@ -1,4 +1,11 @@
 <style>
+    .export_h1 {
+        display: inline;
+    }
+    .loading {
+        display: flex;
+        justify-content: space-between;
+    }
     .layer_name {
         padding-left: 10px; height: 40px; width: 90%; background-color: #f9fdb3; border: none; border-radius: 50px;
     }
@@ -7,15 +14,20 @@
     }
 </style>
 
-<h1>Select the Layer for the cycle.</h1>
+<div class="loading" ng-init="hideLoading = true">
+    <h1 class="export_h1">Select the Layer for the cycle.</h1> <h1 class="export_h1" style="color: greenyellow;" ng-hide="hideLoading">{{loadingMessage}}</h1>
+</div>
 <p>The layer that will be used as a refrence for the animation time. One cycle of that layer will complete the animation.</p>
+<p>Once you press "Export as Gif", the animation will start generating and it will take some time to load, 
+    once it's complete the gif will popup in a separate window, 
+    please right click and press save to download.</p>
 
 <div class="layer" ng-repeat="image in images">
     <div style="display: flex; justify-content: space-between; align-items: center;">
         <img src="{{image.img.elt.currentSrc}}" width="50px" height="50px" alt="img" />
         <input class="layer_name" type="text" ng-model="image.name"/>
-        <input type="radio" style="justify-self: flex-end;" name="cycle" ng-click="Log(image); exportLayerId = image.id"/>
+        <input type="radio" style="justify-self: flex-end;" name="cycle" ng-click="setExportLayerId(image.id);"/>
     </div>
 </div>
 
-<button id="export_button" ng-click="exportGif();">Export As Gif</button>
+<button id="export_button" ng-click="exportGif(); hideLoading = false;">Export As Gif</button>

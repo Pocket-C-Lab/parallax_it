@@ -2,6 +2,7 @@ var app = angular.module('app-main', ['ngRoute', 'ng-context-menu']);
 
 app.controller('side-nav', function displayMessage($scope) {
 	$scope.message = "Hello World!";
+	$loadingMessage = "Loading...";
 
 	$scope.images = [];
 	$scope.totalImages = 0;
@@ -168,16 +169,24 @@ app.controller('side-nav', function displayMessage($scope) {
 		menu.hide();
 		document.removeEventListener('click', hideContextMenu);
 	};
-	$scope.exportLayerId = 0;
+	$scope.exportLayerId = -1;
+	$scope.setExportLayerId = (id) => {
+		console.log($scope.exportLayerId, id);
+		$scope.exportLayerId = id;
+	}
 	$scope.exportGif = () => {
-		console.log("exportGif!");
-	
-		$scope.images.forEach(element => {
-			element.reset();
-		});
-	
-		recording = true;
-		$scope.animationPlay = true;
+		console.log("exportGif!", $scope.images);
+		if ($scope.images.length > 0) {
+			$scope.images.forEach(element => {
+				element.reset();
+			});
+		
+			recording = true;
+			$scope.animationPlay = true;
+			$scope.loadingMessage = "Loading...";
+		} else {
+			$scope.loadingMessage = "Add images first!";
+		}
 	};
 	
 	// Gif Export Logic Start
@@ -198,6 +207,7 @@ app.controller('side-nav', function displayMessage($scope) {
 	}
 	function renderGif() {
 		gif.render();
+		console.log("Gif Rendering!");
 	}
 	
 	// Gif Export Logic
@@ -238,7 +248,9 @@ app.controller('side-nav', function displayMessage($scope) {
 			this.x = Math.floor(this.x - this.speed);
 			this.x2 = Math.floor(this.x2 - this.speed);
 
-			if (this.id == $scope.exportLayerId && this.x2 == 0) {
+			console.log(this.id, this.x2, $scope.exportLayerId);
+
+			if (this.id == $scope.exportLayerId && this.x2 < 0) {
 				renderGif();
 				recording = false;
 				$scope.animationPlay = false;
