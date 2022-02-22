@@ -1,1 +1,21 @@
-<button ng-click="saveVid();">Export As Gif</button>
+<style>
+    .layer_name {
+        padding-left: 10px; height: 40px; width: 90%; background-color: #f9fdb3; border: none; border-radius: 50px;
+    }
+    #export_button {
+        margin-top: 40px;
+    }
+</style>
+
+<h1>Select the Layer for the cycle.</h1>
+<p>The layer that will be used as a refrence for the animation time. One cycle of that layer will complete the animation.</p>
+
+<div class="layer" ng-repeat="image in images">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <img src="{{image.img.elt.currentSrc}}" width="50px" height="50px" alt="img" />
+        <input class="layer_name" type="text" ng-model="image.name"/>
+        <input type="radio" style="justify-self: flex-end;" name="cycle" ng-click="Log(image); exportLayerId = image.id"/>
+    </div>
+</div>
+
+<button id="export_button" ng-click="exportGif();">Export As Gif</button>

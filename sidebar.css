@@ -45,7 +45,7 @@
   .sidebar .section {
     display: flex;
     justify-content: space-between;
-    color: #e1e2e4; 
+    color: grey; 
     font-family: Verdana; 
     font-size: 17px; 
     padding-left: 10px;

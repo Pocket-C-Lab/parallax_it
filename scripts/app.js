@@ -95,14 +95,7 @@ app.controller('side-nav', function displayMessage($scope) {
 	};
 	$scope.o_oF = function(i) {
 		switch(i) {
-			case 'C':
-				$scope.message = "New File";
-			break;
-			case 'D':
-				$scope.message = "Open File";
-
-			break;
-			case 'H':
+			case 'Layers':
 				$scope.message = "Import";
 				var fileSelector = document.createElement('input');
 				fileSelector.setAttribute('type', 'file');
@@ -123,13 +116,18 @@ app.controller('side-nav', function displayMessage($scope) {
 							if (img.width > width) {width = img.width; $scope.p.resizeCanvas(width, height, true);}
 							if (img.height > height) {height = img.height; $scope.p.resizeCanvas(width, height, true);}
 							$scope.$apply();
-							$scope.totalImages++;
 						});
 			        };
 			        img = reader.readAsDataURL(file);
 			    };
 			break;
-			case 'G':
+			case 'Speed':
+				$scope.message = "Speed";
+			break;
+			case 'Save':
+				$scope.message = "Save";
+			break;
+			case 'Export':
 				$scope.message = "Export";
 			break;
 		}
@@ -170,33 +168,41 @@ app.controller('side-nav', function displayMessage($scope) {
 		menu.hide();
 		document.removeEventListener('click', hideContextMenu);
 	};
-	$scope.saveVid = () => {
-		console.log("saveVid!");
-		// if (!recording) {
-		// 	let minSpeedElement = new Layer("", "", null, null, 0);
-		// 	$scope.images.forEach(element => {
-		// 		if (element.speedModifier < minSpeedElement.speedModifier)
-		// 			minSpeedElement = element;
-		// 	});
-		// }
-		recording = !recording;
-		if (!recording) {
-			gif.render();
-		}
+	$scope.exportLayerId = 0;
+	$scope.exportGif = () => {
+		console.log("exportGif!");
+	
+		$scope.images.forEach(element => {
+			element.reset();
+		});
+	
+		recording = true;
+		$scope.animationPlay = true;
 	};
+	
+	// Gif Export Logic Start
+	function setupGif() {
+		gif = new GIF({
+			workers: 5,
+			quality: 1
+		});
+		gif.on('finished', function(blob) {
+			window.open(URL.createObjectURL(blob));
+		});
+	}
+	function addGifFrame() {
+		gif.addFrame(cnv.elt, {
+			delay: 20, // 20 is the minimum
+			copy: true
+		});
+	}
+	function renderGif() {
+		gif.render();
+	}
+	
+	// Gif Export Logic
 
-
-
-	var canvas = document.getElementById("canvas");
-	var redraw = true, width = 0, height = 0;
-	// var redraw = true, width = window.innerWidth - 460, height = window.innerHeight - 75;
-	var canvasX1 = canvas.offsetLeft, canvasY1 = canvas.offsetTop, canvasX2 = canvasX1+width, canvasY2 = canvasY1+height;
-	var colors = ['white', 'black'], colorSelected = 1;
-	let img;
-	let gameSpeed = 10;
-
-	var cnv, gif, recording = false;
-
+	
 	class Layer {
 		constructor(id, name, type, image1, image2, speedModifier) {
 			this.id = id;
@@ -231,12 +237,36 @@ app.controller('side-nav', function displayMessage($scope) {
 			}
 			this.x = Math.floor(this.x - this.speed);
 			this.x2 = Math.floor(this.x2 - this.speed);
+
+			if (this.id == $scope.exportLayerId && this.x2 == 0) {
+				renderGif();
+				recording = false;
+				$scope.animationPlay = false;
+			}
 		}
+
+		reset() {
+			this.x = 0;
+			this.x2 = width;
+		}
+
 		draw() {
 			$scope.p.image(this.img, this.x, this.y, this.width, this.height);
 			$scope.p.image(this.imginv, this.x2, this.y, this.width, this.height);
 		}
 	}
+
+
+
+	var canvas = document.getElementById("canvas");
+	var redraw = true, width = 0, height = 0;
+	// var redraw = true, width = window.innerWidth - 460, height = window.innerHeight - 75;
+	var canvasX1 = canvas.offsetLeft, canvasY1 = canvas.offsetTop, canvasX2 = canvasX1+width, canvasY2 = canvasY1+height;
+	var colors = ['white', 'black'], colorSelected = 1;
+	let img;
+	let gameSpeed = 10;
+
+	var cnv, gif, recording = false;
 
 	let sketch = function(p) {
 		p.setup = () => {
@@ -245,17 +275,8 @@ app.controller('side-nav', function displayMessage($scope) {
 			p.background("#FFFFFF");	//#f5f5f6
 			p.strokeWeight(0.2);
 		
-			setupGIF();
+			setupGif();
 		};
-		function setupGIF() {
-			gif = new GIF({
-				workers: 5,
-				quality: 1
-			});
-			gif.on('finished', function(blob) {
-				window.open(URL.createObjectURL(blob));
-			});
-		}
 		var x=0, y=0;
 
 		p.draw = () => {
@@ -269,10 +290,7 @@ app.controller('side-nav', function displayMessage($scope) {
 			}
 
 			if (recording) {
-				gif.addFrame(cnv.elt, {
-					delay: 20, // 20 is the minimum
-					copy: true
-				});
+				addGifFrame();
 			}
 		};
 		p.mouseClicked = () => {};
