@@ -7,6 +7,7 @@ app.controller('side-nav', function displayMessage($scope) {
 	$scope.images = [];
 	$scope.totalImages = 0;
 	$scope.animationPlay = false;
+	$scope.animationSpeed = 10;
 
 	var brush = {
 		name: "brush",
@@ -232,12 +233,12 @@ app.controller('side-nav', function displayMessage($scope) {
 				this.imginv = image2;
 			}
 			this.speedModifier = speedModifier;
-			this.speed = gameSpeed * this.speedModifier;
+			this.speed = $scope.animationSpeed * this.speedModifier;
 		}
 		
 		update() {
 			let temp = (this.speedModifier * 0.1);
-			this.speed = gameSpeed * temp;
+			this.speed =$scope.animationSpeed * temp;
 			if (this.x <= -this.width) {
 				this.x = this.width;
 				// this.x = this.width + this.x - this.speed;
@@ -276,7 +277,6 @@ app.controller('side-nav', function displayMessage($scope) {
 	var canvasX1 = canvas.offsetLeft, canvasY1 = canvas.offsetTop, canvasX2 = canvasX1+width, canvasY2 = canvasY1+height;
 	var colors = ['white', 'black'], colorSelected = 1;
 	let img;
-	let gameSpeed = 10;
 
 	var cnv, gif, recording = false;
 
