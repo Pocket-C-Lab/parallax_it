@@ -48,9 +48,9 @@
 
 		<!-- The Left sidebar 2 -->
 		<div class="sidebar"
-			ng-hide="leftMenuVisibility" ng-init="option = [{n:'Layers', h:'#new_file',    i:'C', v:false},
-															{n:'Speed',  h:'#open_file',   i:'D', v:false},
-															{n:'Save',   h:'#save_file',   i:'E', v:false},
+			ng-hide="leftMenuVisibility" ng-init="option = [{n:'Layers', h:'#new_file',    i:'H', v:false},
+															{n:'Speed',  h:'#open_file',   i:'E', v:false},
+															{n:'Save',   h:'#save_file',   i:'C', v:false},
 															{n:'Export', h:'#import_file', i:'G', v:false}]"> 
 															<!-- {n:'Import', h:'#import',      i:'H', v:''}, -->
 			<!-- Layers -->
@@ -71,33 +71,33 @@
 				</div>
 			</div>
 			<!-- Speed -->
-			<a class="section" style="padding-left: 10px;" ng-click="option[0].v==false?option[0].v=true:option[0].v=false;">
-				<p>{{option[1].n}}</p>
+			<a class="section" style="padding-left: 10px; justify-content: flex-start;" ng-click="option[1].v==false?option[1].v=true:option[1].v=false;">
+				<p class="icon" style="color: grey;">{{option[1].i}}</p><p>{{option[1].n}}</p>
 			</a>
 			<div>
-				<div style="margin: 0; text-align: center;" ng-hide="option[2].v">
+				<div style="margin: 0; text-align: center;" ng-hide="option[1].v">
 					<div style="display: flex; justify-content: space-between;">
 						<input type="range" min="0" max="50" value="10" class="slider" ng-model="animationSpeed"/>
 					</div>
 				</div>
-				<div style="margin: 0; display: inline-flex; width: 100%;" ng-hide="option[2].v">
-					<button ng-click="animationPlay = true;" style="margin-left: 5px;">Start</button>
-					<button  ng-click="animationPlay = false;">Stop</button>
+				<div style="margin: 0; display: inline-flex; width: 100%;" ng-hide="option[1].v">
+					<button ng-click="animationPlay = true;" style="margin-top: 3px; margin-left: 5px;">Start</button>
+					<button ng-click="animationPlay = false;" style="margin-top: 3px;">Stop</button>
 				</div>
 			</div>
 			<!-- Save -->
-			<a class="section" style="padding-left: 10px;color: grey;" ng-click="option[0].v==false?option[0].v=true:option[0].v=false;">
-				<p>{{option[2].n}}</p>
+			<a class="section" style="padding-left: 10px; justify-content: flex-start;" ng-click="option[2].v==false?option[2].v=true:option[2].v=false;">
+				<p class="icon" style="color: grey;">{{option[2].i}}</p><p>{{option[2].n}}</p>
 			</a>
-			<div style="margin: 0; display: inline-flex; width: 100%;" ng-hide="option[3].v">
+			<div style="margin: 0; display: inline-flex; width: 100%;" ng-hide="option[2].v">
 				<button ng-click="printImages()" style="margin-left: 5px;">Save</button>
 				<button>Cancel</button>
 			</div>
 			<!-- Export -->
-			<a class="section" style="padding-left: 10px;" ng-click="option[0].v==false?option[0].v=true:option[0].v=false;">
-				<p>{{option[3].n}}</p>
+			<a class="section" style="padding-left: 10px; justify-content: flex-start;" ng-click="option[3].v==false?option[3].v=true:option[3].v=false;">
+				<p class="icon" style="color: grey;">{{option[3].i}}</p><p>{{option[3].n}}</p>
 			</a>
-			<div style="margin: 0; display: inline-flex; width: 100%;" ng-hide="option[4].v">
+			<div style="margin: 0; display: inline-flex; width: 100%;" ng-hide="option[3].v">
 				<button ng-click="hideModal = false; console.log(hideModal);" style="margin-left: 5px;">Export</button>
 			</div>
 

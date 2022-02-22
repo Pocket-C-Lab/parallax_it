@@ -34,7 +34,7 @@ app.controller('side-nav', function displayMessage($scope) {
 	$scope.selected_tool = 'K';
 	$scope.tool_options = {
 		J: ['line', 'pen', 'pencil'],
-		K: ['select'],
+		K: ['leaf cutter', 'packer', 'unpacker'],
 		L: ['bucket fill', 'color picker', 'color wheel'],
 		M: ['select'],
 		N: ['select'],
@@ -229,6 +229,15 @@ app.controller('side-nav', function displayMessage($scope) {
 				this.img = $scope.p.loadGif(image1.elt.src);
 				this.imginv = $scope.p.loadGif(image2.elt.src);
 			} else {
+				var c = document.getElementById("myCanvas");
+				var ctx = c.getContext("2d");
+				var img = document.getElementById("scream");
+				ctx.save();
+				ctx.translate(360, 0);
+				ctx.scale(-1, 1);
+				ctx.drawImage(img, 0, 0);	
+				ctx.restore();
+				
 				this.img = image1;
 				this.imginv = image2;
 			}
@@ -246,10 +255,8 @@ app.controller('side-nav', function displayMessage($scope) {
 				this.x2 = this.width;
 				// this.x2 = this.width + this.x - this.speed;
 			}
-			this.x = Math.floor(this.x - this.speed);
-			this.x2 = Math.floor(this.x2 - this.speed);
-
-			console.log(this.id, this.x2, $scope.exportLayerId);
+			this.x = Math.ceil(this.x - this.speed);
+			this.x2 = Math.ceil(this.x2 - this.speed);
 
 			if (this.id == $scope.exportLayerId && this.x2 < 0) {
 				renderGif();
@@ -268,7 +275,6 @@ app.controller('side-nav', function displayMessage($scope) {
 			$scope.p.image(this.imginv, this.x2, this.y, this.width, this.height);
 		}
 	}
-
 
 
 	var canvas = document.getElementById("canvas");
@@ -296,8 +302,7 @@ app.controller('side-nav', function displayMessage($scope) {
 			if ($scope.images) {
 				$scope.images.forEach(element => {
 					if ($scope.animationPlay) element.update();
-					if (element.visible) element.draw();					
-					// if (element.visible) p.image(element.img, 0, 0, element.img.width, element.img.height);					
+					if (element.visible) element.draw();									
 				});
 			}
 
