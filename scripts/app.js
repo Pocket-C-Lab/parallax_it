@@ -210,8 +210,30 @@ app.controller('side-nav', function displayMessage($scope) {
 		gif.render();
 		console.log("Gif Rendering!");
 	}
-	
 	// Gif Export Logic
+
+	function flipImage(img) {
+		let imginv;
+		let c = document.createElement("canvas");
+		c.style.width = img.width;
+		c.style.height = img.height;
+		c.width = img.width;
+		c.height = img.height;
+		let ctx = c.getContext("2d");
+		ctx.save();
+		ctx.translate(img.width, 0);
+		ctx.scale(-1, 1);
+		ctx.drawImage(img.elt, 0, 0);	
+		ctx.restore();
+
+		// console.log(img.src = ctx.getImageData(0, 0, img.width, img.height).data);
+		imginv = $scope.p.createImg(img.width, img.height);
+		imginv.elt.src = c.toDataURL();
+		console.log(imginv.width, imginv.height, imginv.elt);
+		imginv.hide();
+
+		return imginv;
+	}
 
 	
 	class Layer {
@@ -229,17 +251,9 @@ app.controller('side-nav', function displayMessage($scope) {
 				this.img = $scope.p.loadGif(image1.elt.src);
 				this.imginv = $scope.p.loadGif(image2.elt.src);
 			} else {
-				var c = document.getElementById("myCanvas");
-				var ctx = c.getContext("2d");
-				var img = document.getElementById("scream");
-				ctx.save();
-				ctx.translate(360, 0);
-				ctx.scale(-1, 1);
-				ctx.drawImage(img, 0, 0);	
-				ctx.restore();
-				
 				this.img = image1;
-				this.imginv = image2;
+				this.imginv = flipImage(image2);
+				// this.imginv = image2;
 			}
 			this.speedModifier = speedModifier;
 			this.speed = $scope.animationSpeed * this.speedModifier;
@@ -258,7 +272,7 @@ app.controller('side-nav', function displayMessage($scope) {
 			this.x = Math.ceil(this.x - this.speed);
 			this.x2 = Math.ceil(this.x2 - this.speed);
 
-			if (this.id == $scope.exportLayerId && this.x2 < 0) {
+			if (this.id == $scope.exportLayerId && this.x2 <= -this.width) {
 				renderGif();
 				recording = false;
 				$scope.animationPlay = false;
