@@ -64,8 +64,8 @@ app.controller('side-nav', function displayMessage($scope) {
 	var settings = 
 		[
 		 {name:'size', value:5, type:'number'},
-		 {name:'width', value:'100%', type:'text'},
-		 {name:'height', value:'100%', type:'text'},
+		 {name:'width', value: 0, type:'number'},
+		 {name:'height', value: 0, type:'number'},
 		 {name:'color', value:'black', type:'text'},
 		 {name:'grid', value: true, type:'checkbox'}
 		]
@@ -110,8 +110,14 @@ app.controller('side-nav', function displayMessage($scope) {
 
 				    var reader = new FileReader();
 			        reader.onloadend = function() {
+						console.log(reader.result);
 						img = $scope.p.createImg(reader.result, '', '', function() {
 							console.log(img.elt.width, img.elt.height);
+							console.log(settings[1].value, settings[2].value);
+							if (settings[1].value == 0 && settings[2].value == 0) {
+								settings[1].value = img.elt.width;
+								settings[2].value = img.elt.height;
+							}
 							img.hide();
 							console.log(file);
 							$scope.images.push(new Layer($scope.totalImages++, file.name, file.type, img, img, $scope.totalImages));
@@ -172,8 +178,8 @@ app.controller('side-nav', function displayMessage($scope) {
 	};
 	$scope.exportLayerId = -1;
 	$scope.setExportLayerId = (id) => {
-		console.log($scope.exportLayerId, id);
 		$scope.exportLayerId = id;
+		console.log($scope.exportLayerId, id);
 	}
 	$scope.exportGif = () => {
 		console.log("exportGif!", $scope.images);
@@ -194,7 +200,9 @@ app.controller('side-nav', function displayMessage($scope) {
 	function setupGif() {
 		gif = new GIF({
 			workers: 5,
-			quality: 1
+			quality: 1,
+			// width: settings[1].value,
+			// height: settings[2].value
 		});
 		gif.on('finished', function(blob) {
 			window.open(URL.createObjectURL(blob));
@@ -213,7 +221,7 @@ app.controller('side-nav', function displayMessage($scope) {
 	// Gif Export Logic
 
 	function flipImage(img) {
-		let imginv;
+		var imginv;
 		let c = document.createElement("canvas");
 		c.style.width = img.width;
 		c.style.height = img.height;
@@ -225,13 +233,18 @@ app.controller('side-nav', function displayMessage($scope) {
 		ctx.scale(-1, 1);
 		ctx.drawImage(img.elt, 0, 0);	
 		ctx.restore();
-
+		
 		// console.log(img.src = ctx.getImageData(0, 0, img.width, img.height).data);
-		imginv = $scope.p.createImg(img.width, img.height);
-		imginv.elt.src = c.toDataURL();
-		console.log(imginv.width, imginv.height, imginv.elt);
-		imginv.hide();
+		// imginv = $scope.p.createImg(img.width, img.height);
+		// imginv.elt.src = c.toDataURL();
+		// console.log(imginv.width, imginv.height, imginv.elt);
 
+		imginv = $scope.p.createImg(c.toDataURL(), img.width, img.height, (e) => {
+			console.log(e);
+			imginv.hide();
+			console.log("Finish!");
+		});
+		
 		return imginv;
 	}
 
@@ -256,12 +269,12 @@ app.controller('side-nav', function displayMessage($scope) {
 				// this.imginv = image2;
 			}
 			this.speedModifier = speedModifier;
-			this.speed = $scope.animationSpeed * this.speedModifier;
+			this.speed = (angular.isUndefined($scope.animationSpeed)? 10: $scope.animationSpeed) * this.speedModifier;
 		}
 		
 		update() {
 			let temp = (this.speedModifier * 0.1);
-			this.speed =$scope.animationSpeed * temp;
+			this.speed = (angular.isUndefined($scope.animationSpeed)? 10: $scope.animationSpeed) * temp;
 			if (this.x <= -this.width) {
 				this.x = this.width;
 				// this.x = this.width + this.x - this.speed;
@@ -272,6 +285,7 @@ app.controller('side-nav', function displayMessage($scope) {
 			this.x = Math.ceil(this.x - this.speed);
 			this.x2 = Math.ceil(this.x2 - this.speed);
 
+			console.log(this.width, this.height);
 			if (this.id == $scope.exportLayerId && this.x2 <= -this.width) {
 				renderGif();
 				recording = false;
@@ -309,7 +323,6 @@ app.controller('side-nav', function displayMessage($scope) {
 		
 			setupGif();
 		};
-		var x=0, y=0;
 
 		p.draw = () => {
 			p.clear();
