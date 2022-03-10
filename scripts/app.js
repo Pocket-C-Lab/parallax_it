@@ -66,7 +66,7 @@ app.controller('side-nav', function displayMessage($scope) {
 		 {name:'size', value:5, type:'number'},
 		 {name:'width', value: 0, type:'number'},
 		 {name:'height', value: 0, type:'number'},
-		 {name:'color', value:'black', type:'text'},
+		 {name:'bg-color', value:'black', type:'text'},
 		 {name:'grid', value: true, type:'checkbox'}
 		]
 	;
