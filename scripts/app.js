@@ -278,9 +278,13 @@ app.controller('side-nav', function displayMessage($scope) {
 			if (this.x <= -this.width) {
 				this.x = this.width;
 				// this.x = this.width + this.x - this.speed;
-			} if (this.x2 <= -this.width) {
+			} else if (this.x2 <= -this.width) {
 				this.x2 = this.width;
 				// this.x2 = this.width + this.x - this.speed;
+			} else if (this.x > this.width) {
+				this.x = -this.width;
+			} else if (this.x2 > this.width) {
+				this.x2 = -this.width;
 			}
 			this.x = Math.ceil(this.x - this.speed);
 			this.x2 = Math.ceil(this.x2 - this.speed);
