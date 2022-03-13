@@ -63,23 +63,29 @@ app.controller('side-nav', function displayMessage($scope) {
 
 	var settings = 
 		[
-		 {name:'size', value:5, type:'number'},
+		 {name:'size', value: 1, type:'number'},
 		 {name:'width', value: 0, type:'number'},
 		 {name:'height', value: 0, type:'number'},
 		 {name:'bg-color', value:'black', type:'text'},
 		 {name:'grid', value: true, type:'checkbox'}
 		]
 	;
-	var selected_setting = 'J';
 
 	// tools login ends here...
 	$scope.brush = brush;
 	$scope.tools = tools;
 	$scope.settings = settings;
+	$scope.settingsSelection = (name) => {
+		switch(name) {
+			case 'size':
+				$scope.p.resizeCanvas(width*settings[0].value, height*settings[0].value, true);
+			break;
+		}
+	}
 	$scope.printImages = function() {
 		console.log($scope.images);
 	};
-	$scope.o_oO = function(i) {
+	$scope.leftSideOptions = function(i) {
 		switch(i) {
 			case 'C':
 				$scope.message = "Option 1";
@@ -95,7 +101,7 @@ app.controller('side-nav', function displayMessage($scope) {
 			break;
 		}
 	};
-	$scope.o_oF = function(i) {
+	$scope.leftSideFeatures = function(i) {
 		switch(i) {
 			case 'Layers':
 				$scope.message = "Import";
@@ -110,7 +116,6 @@ app.controller('side-nav', function displayMessage($scope) {
 
 				    var reader = new FileReader();
 			        reader.onloadend = function() {
-						console.log(reader.result);
 						img = $scope.p.createImg(reader.result, '', '', function() {
 							console.log(img.elt.width, img.elt.height);
 							console.log(settings[1].value, settings[2].value);
@@ -121,8 +126,10 @@ app.controller('side-nav', function displayMessage($scope) {
 							img.hide();
 							console.log(file);
 							$scope.images.push(new Layer($scope.totalImages++, file.name, file.type, img, img, $scope.totalImages));
-							if (img.width > width) {width = img.width; $scope.p.resizeCanvas(width, height, true);}
-							if (img.height > height) {height = img.height; $scope.p.resizeCanvas(width, height, true);}
+							if (img.width > width) {width = img.width; $scope.p.resizeCanvas(width*settings[0].value, height*settings[0].value, true);}
+							if (img.height > height) {height = img.height; $scope.p.resizeCanvas(width*settings[0].value, height*settings[0].value, true);}
+							// record the canvas size for the new values
+							canvasX2 = canvasX1+width, canvasY2 = canvasY1+height;
 							$scope.$apply();
 						});
 			        };
@@ -143,6 +150,7 @@ app.controller('side-nav', function displayMessage($scope) {
 	$scope.Log = function(message) {
 		console.log(message);
 	};
+
 
 	$scope.toolsVisibility = "";
 	$scope.tools_visibility = () => {
@@ -289,7 +297,6 @@ app.controller('side-nav', function displayMessage($scope) {
 			this.x = Math.ceil(this.x - this.speed);
 			this.x2 = Math.ceil(this.x2 - this.speed);
 
-			console.log(this.width, this.height);
 			if (this.id == $scope.exportLayerId && this.x2 <= -this.width) {
 				renderGif();
 				recording = false;
@@ -303,16 +310,16 @@ app.controller('side-nav', function displayMessage($scope) {
 		}
 
 		draw() {
-			$scope.p.image(this.img, this.x, this.y, this.width, this.height);
-			$scope.p.image(this.imginv, this.x2, this.y, this.width, this.height);
+			$scope.p.image(this.img, this.x, this.y, this.width*settings[0].value, this.height*settings[0].value);
+			$scope.p.image(this.imginv, this.x2, this.y, this.width*settings[0].value, this.height*settings[0].value);
 		}
 	}
 
 
 	var canvas = document.getElementById("canvas");
+	var canvasX1 = canvas.offsetLeft, canvasY1 = canvas.offsetTop;
 	var redraw = true, width = 0, height = 0;
 	// var redraw = true, width = window.innerWidth - 460, height = window.innerHeight - 75;
-	var canvasX1 = canvas.offsetLeft, canvasY1 = canvas.offsetTop, canvasX2 = canvasX1+width, canvasY2 = canvasY1+height;
 	var colors = ['white', 'black'], colorSelected = 1;
 	let img;
 
@@ -343,11 +350,19 @@ app.controller('side-nav', function displayMessage($scope) {
 		};
 		p.mouseClicked = () => {};
 		p.mouseWheel = (event) => {
-			// print(event.delta);
-			if (event.delta > 0 || settings[0].value > 1)
-			settings[0].value += event.delta/2;
-			// resize();
-			//return false;
+			console.log(event, canvasX1, canvasX2);
+			// if (event.delta > 0 || settings[0].value > 1)
+			// settings[0].value += event.delta/2;
+			if (event.x > canvasX1 && event.x < canvasX2 && event.y > canvasY1 && event.y < canvasY2) {
+				if (event.delta > 0)
+					settings[0].value -= 0.01;
+				else settings[0].value += 0.01;
+
+				// record the canvas size for the new values
+				canvasX2 = canvasX1+width, canvasY2 = canvasY1+height;
+				$scope.p.resizeCanvas(width*settings[0].value, height*settings[0].value, true);
+			}
+			return false;
 		};
 		p.mouseMoved = () => {};
 		p.mouseDragged = (event) => {};

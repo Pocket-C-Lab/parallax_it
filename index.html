@@ -39,7 +39,7 @@
                                  {n:'Option 3', h:'#option_3', i:'H'}, 
                                  {n:'Option 4', h:'#option_4', i:'G'}]
 		  					      track by $index">
-		  	<a href="{{option.h}}" ng-click="o_oO(option.i)">
+		  	<a href="{{option.h}}" ng-click="leftSideOptions(option.i)">
 		  		<p class="icon" style="color: grey;">{{option.i}}</p><p>{{option.n}}</p>
 		  	</a>
 		  </div>
@@ -58,7 +58,7 @@
 				<p class="icon" style="color: grey;">{{option[0].i}}</p><p>{{option[0].n}}</p>
 			</a>
 			<div style="margin: 0; display: inline-flex; width: 100%;" ng-hide="option[0].v">
-				<button id="import" style="margin-left: 5px;" ng-click="o_oF(option[0].n);draggable('layers');">+ click to add an image</button>
+				<button id="import" style="margin-left: 5px;" ng-click="leftSideFeatures(option[0].n);draggable('layers');">+ click to add an image</button>
 			</div>
 			<div id="layers" ng-hide="option[0].v" style="max-height: 300px; overflow-y: auto; overflow-x: hidden;">
 				<div class="layer draggable" ng-repeat="image in images">
@@ -67,9 +67,9 @@
 						<input type="text" ng-model="image.name" style="width: 90px; background-color: #f9fdb3; border: none; border-radius: 10px;"/>
 						<input type="checkbox" style="justify-self: flex-end;" checked ng-click="image.visible = !image.visible;"/>
 					</div>
-					<div style="display: inline-flex;">
+					<div style="display: inline-flex; margin-bottom: 5px;">
 						<input type="number" step="0.01" style="width: 50px;" ng-model="image.speedModifier"/>
-						<input type="range" step="0.01" ng-model="image.speedModifier" min="-10" max="10" value="1" style="width: 90%; margin: 5%;" id="myRange" />
+						<input type="range" step="0.01" ng-model="image.speedModifier" min="-10" max="10" value="1" style="width: 100%;" id="myRange" />
 					</div>
 				</div>
 			</div>
@@ -134,16 +134,22 @@
 		  		<ul ng-repeat="setting in settings" style="margin: 0px; padding: 0px;">
 					<li style="display: flex; justify-content: space-between; width: 100%; height: 40px;" class="setting-li" ng-click="">
 						<p style="display: inline; color: grey;">{{setting.name}}<p>
-						<input style="display: inline;" type="{{setting.type}}" step="0.001" min="5" max="25" ng-model="setting.value"/>
+						<input style="display: inline;" type="{{setting.type}}" step="0.001" ng-model="setting.value" ng-change="settingsSelection(setting.name)"/>
 					</li>
 				</ul>
 		  	</div>
+			<div class="section" ng-click="settings_visibility()">
+				<p style="color: grey;">Advertisement</p><p>&#8681;</p>
+			</div>
+			<div class="setting" ng-hide="settingsVisibility">
+				<p>Advertisement will be here soon...</p>
+			</div>
 		</div>
 		<!-- End of Right sidebar 2 -->
 	</div>
 
 	<!-- Start of context menu -->
-	<div class="dropdown" id="myMenu">
+	<div class="dropdown close-context-menu" id="myMenu">
 		<ul class="dropdown-menu"
 		    	role="menu" aria-labelledby="dropdownMenu1">
 			<li ng-repeat="tool_option in tool_options[selected_tool]" role="presentation">

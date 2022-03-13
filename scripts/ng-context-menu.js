@@ -17,7 +17,7 @@ angular
             fn = $parse(attrs.contextMenu);
 
         function open(event, element) {
-          element.removeClass('open');
+          element.removeClass('close-context-menu');
           element.css('top', event.pageY + 'px');
           if (150 + event.pageX > screen.width)
             element.css('left', (event.pageX - 150) + 'px');
@@ -29,11 +29,11 @@ angular
 
         function close(element) {
           opened = false;
-          element.addClass('open');
+          element.addClass('close-context-menu');
         }
 
         menuElement.css('position', 'absolute');
-        // menuElement.addClass('open');
+        // menuElement.addClass('close-context-menu');
         // console.log(menuElement.getBoundingClientRect());
         
 

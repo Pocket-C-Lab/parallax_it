@@ -83,7 +83,7 @@
   .pointer:hover {
     background-color: #f2ffc4;
   }
-  .open {
+  .close-context-menu {
     display: block;
     visibility: hidden;
   }
