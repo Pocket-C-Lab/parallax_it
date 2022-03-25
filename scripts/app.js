@@ -45,7 +45,7 @@ app.controller('side-nav', function displayMessage($scope) {
 	$scope.selectTool = (evt, s) => {
 		switch(evt.which) {
 	        case 1:
-	            increment(); // left click
+	            console.log("left click!", s); // left click
 	            break;
 	        case 2:
 	            // in case you need some middle click things
@@ -149,14 +149,6 @@ app.controller('side-nav', function displayMessage($scope) {
 	};
 	$scope.Log = function(message) {
 		console.log(message);
-	};
-
-
-	$scope.toolsVisibility = "";
-	$scope.tools_visibility = () => {
-		if ($scope.toolsVisibility == "")
-			$scope.toolsVisibility = "none";
-		else $scope.toolsVisibility = "";
 	};
 
 	$scope.settingsVisibility = "";

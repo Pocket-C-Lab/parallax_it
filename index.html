@@ -22,6 +22,9 @@
 	<!-- <script type="text/javascript" src="context.js/context-menu.min.js"></script> -->
 	<script type="text/javascript" src="scripts/app.js"></script>
 	<script type="text/javascript" src="scripts/ng-context-menu.js"></script>
+
+	<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8186673570019985"
+     crossorigin="anonymous"></script>
 </head>
 <body ng-controller="side-nav" ng-init="leftMenuVisibility='';rightMenuVisibility=''">
 	<header>
@@ -114,8 +117,8 @@
 		</div>
 
 		<!-- Start of Right sidebar 1 -->
-		<div class="sidebar" style="right: 0;" ng-hide="rightMenuVisibility">
-			<div class="section" ng-click="tools_visibility()">
+		<div class="sidebar" style="right: 0;" ng-hide="rightMenuVisibility" ng-init="advertisementVisibility=false; settingsVisibility=false; toolsVisibility=false">
+			<div class="section" ng-click="toolsVisibility==false ? toolsVisibility=true : toolsVisibility=false">
 		  		<p style="color: grey;">Tools</p><p>&#8681;</p>
 		  	</div>
 			<div style="margin: 0; text-align: center;" ng-hide="toolsVisibility">
@@ -127,7 +130,7 @@
 						ng-class="{ 'highlight': highlight, 'expanded' : expanded }">{{tool}}</li>
 				</ul>
 			</div>
-			<div class="section" ng-click="settings_visibility()">
+			<div class="section" ng-click="settingsVisibility==false ? settingsVisibility=true : settingsVisibility=false">
 		  		<p style="color: grey;">Settings</p><p>&#8681;</p>
 		  	</div>
 		  	<div class="setting" ng-hide="settingsVisibility">
@@ -138,11 +141,11 @@
 					</li>
 				</ul>
 		  	</div>
-			<div class="section" ng-click="settings_visibility()">
+			<div class="section" ng-click="advertisementVisibility==false ? advertisementVisibility=true : advertisementVisibility=false">
 				<p style="color: grey;">Advertisement</p><p>&#8681;</p>
 			</div>
-			<div class="setting" ng-hide="settingsVisibility">
-				<p>Advertisement will be here soon...</p>
+			<div class="setting" ng-hide="advertisementVisibility">
+				<p>Advertisement here soon...</p>
 			</div>
 		</div>
 		<!-- End of Right sidebar 2 -->

@@ -80,7 +80,7 @@ button {
 	background:#ffffff;
 	border: 2px solid lightgrey;
 	resize: both;
-	overflow: scroll;
+	overflow: auto;
 }
 
 .section {
