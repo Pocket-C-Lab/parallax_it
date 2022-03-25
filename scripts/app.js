@@ -310,6 +310,7 @@ app.controller('side-nav', function displayMessage($scope) {
 
 	var canvas = document.getElementById("canvas");
 	var canvasX1 = canvas.offsetLeft, canvasY1 = canvas.offsetTop;
+	var canvasX2, canvasY2;
 	var redraw = true, width = 0, height = 0;
 	// var redraw = true, width = window.innerWidth - 460, height = window.innerHeight - 75;
 	var colors = ['white', 'black'], colorSelected = 1;
