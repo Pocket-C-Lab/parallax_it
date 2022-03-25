@@ -380,27 +380,27 @@ app.controller('side-nav', function displayMessage($scope) {
 	$scope.p = new p5(sketch, 'canvas');
 });
 
-// app.config(function($routeProvider) {
-// 	$routeProvider
-// 	.when("/", {
-// 		templateUrl : "pages/export.htm"
-// 	})
-// 	.when("/animatedShapes", {
-// 		templateUrl : "pages/animated_shapes.htm"
-// 	})
-// 	.when("/openDating", {
-// 		templateUrl : "pages/open_dating.htm"
-// 	})
-// 	.when("/pixels", {
-// 		templateUrl : "pages/pixels.htm"
-// 	})
-// 	.when("/work", {
-// 		templateUrl : "pages/work_profile.htm"
-// 	})
-// 	.when("/test", {
-// 		templateUrl : "pages/test2.htm"
-// 	})
-// 	.when("/credits", {
-// 		templateUrl : "pages/credits.htm"
-// 	});
-// });
+app.config(function($routeProvider) {
+	$routeProvider
+	.when("/", {
+		templateUrl : "pages/export.htm"
+	})
+	.when("/animatedShapes", {
+		templateUrl : "pages/animated_shapes.htm"
+	})
+	.when("/openDating", {
+		templateUrl : "pages/open_dating.htm"
+	})
+	.when("/pixels", {
+		templateUrl : "pages/pixels.htm"
+	})
+	.when("/work", {
+		templateUrl : "pages/work_profile.htm"
+	})
+	.when("/test", {
+		templateUrl : "pages/test2.htm"
+	})
+	.when("/credits", {
+		templateUrl : "pages/credits.htm"
+	});
+});

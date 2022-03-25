@@ -13,15 +13,6 @@
     scrollbar-width: none;
   }
   
-  @font-face {
-    font-family: face2;
-    src: url(assets/fonticons.ttf);
-  }
-  @font-face {
-    font-family: face1;
-    src: url(assets/material-ui.ttf);
-  }
-
   /* Sidebar links */
   .sidebar a {
     display: flex;
