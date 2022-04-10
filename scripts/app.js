@@ -257,6 +257,8 @@ app.controller('side-nav', function displayMessage($scope) {
 			this.visible = true;
 			this.x = 0;
 			this.y = 0;
+			this.originalWidth = image1.width;
+			this.originalHeight = image1.height;
 			this.width = image1.width;
 			this.height = image1.height;
 			this.x2 = this.width;
@@ -273,6 +275,8 @@ app.controller('side-nav', function displayMessage($scope) {
 		}
 		
 		update() {
+			this.width = this.originalWidth*settings[0].value;
+			this.height = this.originalHeight*settings[0].value;
 			let temp = (this.speedModifier * 0.1);
 			this.speed = (angular.isUndefined($scope.animationSpeed)? 10: $scope.animationSpeed) * temp;
 			if (this.x <= -this.width) {
@@ -302,8 +306,8 @@ app.controller('side-nav', function displayMessage($scope) {
 		}
 
 		draw() {
-			$scope.p.image(this.img, this.x, this.y, this.width*settings[0].value, this.height*settings[0].value);
-			$scope.p.image(this.imginv, this.x2, this.y, this.width*settings[0].value, this.height*settings[0].value);
+			$scope.p.image(this.img, this.x, this.y, this.width, this.height);
+			$scope.p.image(this.imginv, this.x2, this.y, this.width, this.height);
 		}
 	}
 

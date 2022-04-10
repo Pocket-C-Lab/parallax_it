@@ -93,6 +93,7 @@ body {
 }
 p {
 	user-select: none;
+  color: grey;
 }
 img {
 	user-select: none;

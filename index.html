@@ -22,9 +22,6 @@
 	<!-- <script type="text/javascript" src="context.js/context-menu.min.js"></script> -->
 	<script type="text/javascript" src="scripts/app.js"></script>
 	<script type="text/javascript" src="scripts/ng-context-menu.js"></script>
-
-	<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8186673570019985"
-     crossorigin="anonymous"></script>
 </head>
 <body ng-controller="side-nav" ng-init="leftMenuVisibility='';rightMenuVisibility=''">
 	<header>
@@ -43,7 +40,7 @@
                                  {n:'Option 4', h:'#option_4', i:'G'}]
 		  					      track by $index">
 		  	<a href="{{option.h}}" ng-click="leftSideOptions(option.i)">
-		  		<p class="icon" style="color: grey;">{{option.i}}</p><p>{{option.n}}</p>
+		  		<p class="icon">{{option.i}}</p><p>{{option.n}}</p>
 		  	</a>
 		  </div>
 		</div>
@@ -58,7 +55,7 @@
 															<!-- {n:'Import', h:'#import',      i:'H', v:''}, -->
 			<!-- Layers -->
 			<a class="section" style="padding-left: 10px; justify-content: flex-start;" ng-click="option[0].v==false?option[0].v=true:option[0].v=false;">
-				<p class="icon" style="color: grey;">{{option[0].i}}</p><p>{{option[0].n}}</p>
+				<p class="icon">{{option[0].i}}</p><p>{{option[0].n}}</p>
 			</a>
 			<div style="margin: 0; display: inline-flex; width: 100%;" ng-hide="option[0].v">
 				<button id="import" style="margin-left: 5px;" ng-click="leftSideFeatures(option[0].n);draggable('layers');">+ click to add an image</button>
@@ -78,7 +75,7 @@
 			</div>
 			<!-- Speed -->
 			<a class="section" style="padding-left: 10px; justify-content: flex-start;" ng-click="option[1].v==false?option[1].v=true:option[1].v=false;">
-				<p class="icon" style="color: grey;">{{option[1].i}}</p><p>{{option[1].n}}</p>
+				<p class="icon">{{option[1].i}}</p><p>{{option[1].n}}</p>
 			</a>
 			<div>
 				<div style="margin: 0; text-align: center;" ng-hide="option[1].v">
@@ -94,7 +91,7 @@
 			</div>
 			<!-- Save -->
 			<a class="section" style="padding-left: 10px; justify-content: flex-start;" ng-click="option[2].v==false?option[2].v=true:option[2].v=false;">
-				<p class="icon" style="color: grey;">{{option[2].i}}</p><p>{{option[2].n}}</p>
+				<p class="icon">{{option[2].i}}</p><p>{{option[2].n}}</p>
 			</a>
 			<div style="margin: 0; display: inline-flex; width: 100%;" ng-hide="option[2].v">
 				<button ng-click="printImages()" style="margin-left: 5px;">Save</button>
@@ -102,7 +99,7 @@
 			</div>
 			<!-- Export -->
 			<a class="section" style="padding-left: 10px; justify-content: flex-start;" ng-click="option[3].v==false?option[3].v=true:option[3].v=false;">
-				<p class="icon" style="color: grey;">{{option[3].i}}</p><p>{{option[3].n}}</p>
+				<p class="icon">{{option[3].i}}</p><p>{{option[3].n}}</p>
 			</a>
 			<div style="margin: 0; display: inline-flex; width: 100%;" ng-hide="option[3].v">
 				<button ng-click="hideModal = false; console.log(hideModal);" style="margin-left: 5px;">Export</button>
@@ -119,7 +116,7 @@
 		<!-- Start of Right sidebar 1 -->
 		<div class="sidebar" style="right: 0;" ng-hide="rightMenuVisibility" ng-init="advertisementVisibility=false; settingsVisibility=false; toolsVisibility=false">
 			<div class="section" ng-click="toolsVisibility==false ? toolsVisibility=true : toolsVisibility=false">
-		  		<p style="color: grey;">Tools</p><p>&#8681;</p>
+		  		<p>Tools</p><p>&#8681;</p>
 		  	</div>
 			<div style="margin: 0; text-align: center;" ng-hide="toolsVisibility">
 				<ul style="display: inline; padding-left: 0;" ng-repeat="tool in tools">
@@ -131,24 +128,16 @@
 				</ul>
 			</div>
 			<div class="section" ng-click="settingsVisibility==false ? settingsVisibility=true : settingsVisibility=false">
-		  		<p style="color: grey;">Settings</p><p>&#8681;</p>
+		  		<p">Settings</p><p>&#8681;</p>
 		  	</div>
 		  	<div class="setting" ng-hide="settingsVisibility">
 		  		<ul ng-repeat="setting in settings" style="margin: 0px; padding: 0px;">
 					<li style="display: flex; justify-content: space-between; width: 100%; height: 40px;" class="setting-li" ng-click="">
-						<p style="display: inline; color: grey;">{{setting.name}}<p>
+						<p style="display: inline;">{{setting.name}}<p>
 						<input style="display: inline;" type="{{setting.type}}" step="0.001" ng-model="setting.value" ng-change="settingsSelection(setting.name)"/>
 					</li>
 				</ul>
 		  	</div>
-			<div class="section" ng-click="advertisementVisibility==false ? advertisementVisibility=true : advertisementVisibility=false">
-				<p style="color: grey;">Advertisement</p><p>&#8681;</p>
-			</div>
-			<div class="setting" ng-hide="advertisementVisibility">
-				<div style="width: 100%; height: 1000px;background-color: wheat;">
-
-				</div>
-			</div>
 		</div>
 		<!-- End of Right sidebar 2 -->
 	</div>
