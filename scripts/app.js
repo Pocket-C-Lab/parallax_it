@@ -66,7 +66,7 @@ app.controller('side-nav', function displayMessage($scope) {
 		 {name:'size', value: 1, type:'number'},
 		 {name:'width', value: 0, type:'number'},
 		 {name:'height', value: 0, type:'number'},
-		 {name:'bg-color', value:'black', type:'text'},
+		 {name:'bg-color', value:'beige', type:'text'},
 		 {name:'grid', value: true, type:'checkbox'}
 		]
 	;
@@ -336,6 +336,7 @@ app.controller('side-nav', function displayMessage($scope) {
 
 		p.draw = () => {
 			p.clear();
+			p.background(settings[3].value);	//#f5f5f6
 			if ($scope.images) {
 				$scope.images.forEach(element => {
 					if ($scope.animationPlay) element.update();
