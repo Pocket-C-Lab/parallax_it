@@ -45,7 +45,7 @@ app.controller('side-nav', function displayMessage($scope) {
 	$scope.selectTool = (evt, s) => {
 		switch(evt.which) {
 	        case 1:
-	            alert("This feature isn't available yet!"); // left click
+	            alert("This feature isn't available yet, will be available soon!"); // left click
 	            break;
 	        case 2:
 	            // in case you need some middle click things
