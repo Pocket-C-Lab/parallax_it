@@ -280,10 +280,12 @@ app.controller('side-nav', function displayMessage($scope) {
 			let temp = (this.speedModifier * 0.1);
 			this.speed = (angular.isUndefined($scope.animationSpeed)? 10: $scope.animationSpeed) * temp;
 			if (this.x <= -this.width) {
-				this.x = this.width;
+				// this.x = this.width;
+				this.x = this.width + this.x2;
 				// this.x = this.width + this.x - this.speed;
 			} else if (this.x2 <= -this.width) {
-				this.x2 = this.width;
+				// this.x2 = this.width;
+				this.x2 = this.width + this.x;
 				// this.x2 = this.width + this.x - this.speed;
 			} else if (this.x > this.width) {
 				this.x = -this.width;
